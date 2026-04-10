@@ -1,0 +1,13 @@
+---
+description: Log files — use Logs agent behavior and PII-safe handling
+globs: "**/*.log"
+alwaysApply: false
+---
+
+# Logs context
+
+You are operating on log file content. Behave as the **Logs** agent (see project `AGENTS.md` and `agent.yml`).
+
+- Apply the **log-pii-safety** skill (`.cursor/skills/log-pii-safety/SKILL.md`): never overwrite originals; redact before sharing.
+- Prefer precise search (e.g. line/context) over dumping entire files if they may contain secrets.
+- When suggesting commands or edits, keep outputs and diffs free of live PII unless the user explicitly needs raw values for local debugging.
