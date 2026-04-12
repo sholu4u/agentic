@@ -1,29 +1,23 @@
-# AgenticAI — agent harness metadata (supplements Cursor SKILL.md discovery)
-# Cursor loads skills from .cursor/skills/<name>/SKILL.md automatically; this file
-# documents the project name, agents, and skill layout for tooling and contributors.
-
-name: PIIlogs
-description: >
-  Log handling and PII safety: never overwrite originals; mask or pseudonymize
-  sensitive data in sanitized outputs.
-
-skills:
-  - id: log-pii-safety
-    path: .cursor/skills/log-pii-safety
-    entry: SKILL.md
-  - id: git-code-review
-    path: .cursor/skills/git-code-review
-    entry: SKILL.md
-    script: scripts/code_review_tool.py
-    windowsScriptPath: C:\Users\sholu\Downloads\CursorAI\PIIlogs\scripts\code_review_tool.py
-
-# Named agents bundle a role with the skills they rely on (for docs, automation, and clarity).
 agents:
   - id: logs
     name: Logs agent
     description: >
       Inspects, summarizes, and sanitizes log files. Never overwrites sources;
-      applies PII rules before sharing or committing. Use for .log files, log
-      excerpts, redaction, or troubleshooting from log output.
+      applies PII rules before sharing or committing.
     skills:
-      - log-pii-safety
+      - pii-sanitizer
+    next_agents:
+      - reviewer   # after sanitizing logs, pass to reviewer agent
+
+  - id: reviewer
+    name: Code Review agent
+    description: >
+      Reviews git commits for PII, credentials, vulnerabilities, and common issues.
+      Runs sanitizer first to redact sensitive data, then regex checks, then calls
+      an LLM for deeper vulnerability and optimization review.
+    skills:
+      - git-code-review
+      - llm-code-review
+    config:
+      llm_provider: openai   # or "openai"
+      model: gpt-4-turbo

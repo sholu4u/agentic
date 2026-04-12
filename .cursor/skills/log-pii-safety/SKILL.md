@@ -1,27 +1,17 @@
 ---
-name: log-pii-safety
+name: pii-sanitizer
 description: >-
-  Enforces safe log handling—never overwrite originals; mask or pseudonymize PII
-  in sanitized outputs. Use when sanitizing logs, redacting PII, preparing logs
-  for sharing, or working with sensitive log data.
+  Masks or pseudonymizes sensitive data (emails, phone numbers, API keys,
+  passwords, secrets) before code review. Ensures sanitized output is written
+  to a new file path.
 ---
 
-# Log PII and file safety
+# PII Sanitizer
 
-Read and follow this skill whenever the task touches log files that may contain sensitive data.
+## When to use
+- Before sending code to an LLM reviewer.
+- When preparing code for sharing or committing.
 
-## File safety (`file_safety`)
-
-- Never overwrite original input files.
-- Always write sanitized output to a **new** path (e.g. `_redacted` suffix, a dedicated output directory, or an explicit output path/flag).
-
-## PII handling (`pii_handling`)
-
-- Always mask or pseudonymize sensitive data before sharing, committing, or publishing logs.
-- Prefer **masking** unless **correlation** across lines or events is required; then use **stable pseudonyms** so the same entity maps consistently in the redacted file.
-
-## Workflow reminder
-
-1. Choose a new output path before writing.
-2. Apply redaction (masking or pseudonyms as needed).
-3. Verify the original file is unchanged.
+## How to run
+```bash
+python scripts/pii_sanitizer.py <input_file> <output_file>
