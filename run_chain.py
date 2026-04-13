@@ -1,8 +1,10 @@
 import subprocess, yaml
 
 def run_chain(repo_path=".", commit_hash="HEAD"):
-    with open("./agent.yml") as f:
-        config = yaml.safe_load(f)
+    with open("agent.yml", "r", encoding="utf-8") as f:
+         config = yaml.safe_load(f)
+    #with open("./agent.yml") as f:
+        #config = yaml.safe_load(f)
 
     for agent in config.get("agents", []):
         print(f"Running {agent['name']}...")
