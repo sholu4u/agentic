@@ -6,6 +6,9 @@ agents:
       applies PII rules before sharing or committing.
     skills:
       - pii-sanitizer
+    config:
+      port: 5001
+      method: pii_sanitize
     next_agents:
       - reviewer   # after sanitizing logs, pass to reviewer agent
 
@@ -19,5 +22,11 @@ agents:
       - git-code-review
       - llm-code-review
     config:
-      llm_provider: openai   # or "openai"
+      git_review:
+        port: 5002
+        method: git_review
+      llm_review:
+        port: 5003
+        method: llm_review
+      llm_provider: openai
       model: gpt-4-turbo
